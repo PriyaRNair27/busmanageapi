@@ -4,6 +4,11 @@ const Mongoose=require("mongoose")
 var app=Express()
 app.use(Bodyparser.urlencoded({extended:true}))
 app.use(Bodyparser.json())
+app.use((req, res, next) => { 
+    res.setHeader("Access-Control-Allow-Origin", "*");  
+    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept" ); 
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS" ); 
+    next(); });
 var busmodel=Mongoose.model("buses",
 new Mongoose.Schema({
     route:String,
@@ -36,10 +41,22 @@ app.post("/api/busmanage",(req,res)=>
 
  })
 })
-app.get("/api/busmanage",(req,res)=>
-{
-    res.send("welcome")
+app.get("/api/bus",(req,res)=>{
+    busmodel.find(
+        (error,data)=>{
+            if(error)
+     {
+         res.send({"status":"error","data":error})
+     }
+     else
+     {
+         res.send({"status":"success","data":data})
+     }
+
+            
+        }
+    )
 })
-app.listen(5000,()=>{
+app.listen(4000,()=>{
     console.log("server running")
 })
