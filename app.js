@@ -19,7 +19,33 @@ new Mongoose.Schema({
 
 }))
 Mongoose.connect("mongodb+srv://mzcbook:807826@cluster0.2sbk9.mongodb.net/busDb")
+app.post("/api/busdelete",(req,res)=>{
+    var getId=req.body
+    busmodel.findByIdAndRemove(getId,(error,data)=>{
+        if(error)
+        {
+            res.send({"status":"error","data":error})
+        }
+        else
+        {
+          res.send({"status":"success","data":data})
+        }
+    })
+})
 
+app.post("/api/bussearch",(req,res)=>{
+    var getroute=req.body
+    busmodel.find(getroute,(error,data)=>{
+        if(error)
+        {
+            res.send({"status":"error","data":error})
+        }
+        else
+        {
+            res.send({"status":"success","data":data})
+        }
+    })
+})
 app.post("/api/busmanage",(req,res)=>
 {
     var getroute=req.body.route
